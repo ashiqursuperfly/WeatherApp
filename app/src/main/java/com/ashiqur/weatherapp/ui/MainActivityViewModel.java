@@ -26,7 +26,7 @@ public class MainActivityViewModel extends AndroidViewModel {
         tvStatusString = new MutableLiveData<>();
         apiDataRepository = new ApiDataRepository();
         currentWeatherData = apiDataRepository.getCurrentWeatherLiveData();
-
+        forecastsData = apiDataRepository.getCurrentForeCastsLiveData();
 
 
     }
@@ -40,10 +40,6 @@ public class MainActivityViewModel extends AndroidViewModel {
         //setValue should be called from Main Thread, postValue should be called from this
     }
 
-    public MutableLiveData<WeatherDataModel> getCurrentWeatherData() {
-        return currentWeatherData;
-    }
-
     public void fetchCurrentWeatherData(String lon, String lat){
         apiDataRepository.fetchRestApiCurrentWeatherData(lon,lat,ApiDataRepository.FROM_LAT_LON);
     }
@@ -51,5 +47,12 @@ public class MainActivityViewModel extends AndroidViewModel {
         apiDataRepository.fetchRestApiCurrentWeatherData(city,countryId,ApiDataRepository.FROM_CITY_NAME);
     }
 
+    public MutableLiveData<WeatherDataModel> getCurrentWeatherData() {
+        return currentWeatherData;
+    }
+
+    public MutableLiveData<List<WeatherDataModel>> getForecastsData() {
+        return forecastsData;
+    }
 }
 
