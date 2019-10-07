@@ -7,7 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.ashiqur.weatherapp.ApiDataRepository;
-import com.ashiqur.weatherapp.rest_api.WeatherDataModel;
+import com.ashiqur.weatherapp.rest_api.models.WeatherDataModel;
 
 
 public class MainActivityViewModel extends AndroidViewModel {
@@ -36,8 +36,12 @@ public class MainActivityViewModel extends AndroidViewModel {
         return currentData;
     }
 
-    public void fetchRestApiData(){
-        apiDataRepository.fetchRestApiData();
+    public void fetchRestApiData(String lon,String lat){
+        apiDataRepository.fetchRestApiData(lon,lat);
     }
+    public void fetchRestApiDataFromCityName(String city,String countryId){
+        apiDataRepository.fetchRestApiDataFromCityName(city,countryId);
+    }
+
 }
 

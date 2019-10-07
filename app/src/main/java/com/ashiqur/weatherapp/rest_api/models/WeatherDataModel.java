@@ -1,4 +1,4 @@
-package com.ashiqur.weatherapp.rest_api;
+package com.ashiqur.weatherapp.rest_api.models;
 
 public class WeatherDataModel {
     private String temperature,windSpeed,description,clouds;
