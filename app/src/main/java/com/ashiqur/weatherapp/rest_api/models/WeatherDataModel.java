@@ -1,7 +1,7 @@
 package com.ashiqur.weatherapp.rest_api.models;
 
 public class WeatherDataModel {
-    private String temperature,windSpeed,description,clouds;
+    private String temperature, windSpeed, description, clouds;
     private boolean isError = false;
 
     public WeatherDataModel() {

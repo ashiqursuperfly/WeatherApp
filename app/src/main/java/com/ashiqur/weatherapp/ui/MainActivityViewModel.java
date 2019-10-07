@@ -40,11 +40,12 @@ public class MainActivityViewModel extends AndroidViewModel {
         //setValue should be called from Main Thread, postValue should be called from this
     }
 
-    public void fetchCurrentWeatherData(String lon, String lat){
-        apiDataRepository.fetchRestApiCurrentWeatherData(lon,lat,ApiDataRepository.FROM_LAT_LON);
+    public void fetchCurrentWeatherData(String lon, String lat) {
+        apiDataRepository.fetchRestApiCurrentWeatherData(lon, lat, ApiDataRepository.FROM_LAT_LON);
     }
-    public void fetchCurrentWeatherDataFromCityName(String city, String countryId){
-        apiDataRepository.fetchRestApiCurrentWeatherData(city,countryId,ApiDataRepository.FROM_CITY_NAME);
+
+    public void fetchCurrentWeatherDataFromCityName(String city, String countryId) {
+        apiDataRepository.fetchRestApiCurrentWeatherData(city, countryId, ApiDataRepository.FROM_CITY_NAME);
     }
 
     public MutableLiveData<WeatherDataModel> getCurrentWeatherData() {

@@ -21,7 +21,7 @@ public class ForecastsDataAdapter extends RecyclerView.Adapter<ForecastsDataAdap
     @Override
     public NoteHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recycler_view_note_item, parent, false);
+                .inflate(R.layout.recycler_view_item, parent, false);
         return new NoteHolder(itemView);
     }
 
@@ -39,7 +39,7 @@ public class ForecastsDataAdapter extends RecyclerView.Adapter<ForecastsDataAdap
         return notes.size();
     }
 
-    public WeatherDataModel getNoteAt(int index){
+    public WeatherDataModel getNoteAt(int index) {
         return notes.get(index);
     }
 

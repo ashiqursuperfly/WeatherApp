@@ -25,9 +25,9 @@ public class ApiDataRepository {
     public static final int FROM_CITY_NAME = 0;
     public static final int FROM_LAT_LON = 1;
     private static final String TAG = "ApiDataRepository";
+    public static String latitude, longitude;
     private MutableLiveData<WeatherDataModel> currentWeatherLiveData;
     private WeatherDataModel currentData;
-
     private List<WeatherDataModel> currentForeCasts;
 
 
@@ -38,9 +38,13 @@ public class ApiDataRepository {
         currentForeCasts = new ArrayList<>();
         currentWeatherLiveData = new MutableLiveData<>();
         currentForeCastsLiveData = new MutableLiveData<>();
-        fetchRestApiCurrentWeatherData("90.42", "24.17", ApiDataRepository.FROM_LAT_LON); //TODO: Get Current Location
-        fetchRestApiForecastData("90.42", "24.17", ApiDataRepository.FROM_LAT_LON);
-
+        if (latitude != null && longitude != null) {
+            fetchRestApiCurrentWeatherData(longitude, latitude, ApiDataRepository.FROM_LAT_LON);
+            fetchRestApiForecastData(longitude, latitude, ApiDataRepository.FROM_LAT_LON);
+        } else {
+            fetchRestApiCurrentWeatherData("120.42", "24.17", ApiDataRepository.FROM_LAT_LON);
+            fetchRestApiForecastData("120.42", "24.17", ApiDataRepository.FROM_LAT_LON);
+        }
     }
 
     public void fetchRestApiCurrentWeatherData(String param1, String param2, int MODE) {
@@ -82,8 +86,7 @@ public class ApiDataRepository {
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
-                //TODO:
-                //currentData.setError(true);
+                //TODO: showToast Error Msg
                 Log.wtf(TAG, "OnFailure:" + t.getMessage());
             }
         });
@@ -125,7 +128,7 @@ public class ApiDataRepository {
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
-                //TODO:
+                //TODO: Show Toast Error Msg
                 //currentData.setError(true);
                 Log.wtf(TAG, "OnFailure:" + t.getMessage());
             }
@@ -137,7 +140,7 @@ public class ApiDataRepository {
 
         currentForeCasts.clear();
 
-        for (int i = 0; i < total/2; i++) {
+        for (int i = 0; i < total / 2; i++) {
             JsonElement item = response.body().getAsJsonArray("list").get(i);
             String desc = item.getAsJsonObject().get("weather").getAsJsonArray().get(0).getAsJsonObject().get("description").toString();
             String windSpeed = item.getAsJsonObject().get("wind").getAsJsonObject().get("speed").toString();
@@ -154,7 +157,7 @@ public class ApiDataRepository {
             currentForeCasts.add(newWeatherData);
 
         }
-        Log.wtf(TAG,"Total Forecasts Found:"+currentForeCasts.size());
+        Log.wtf(TAG, "Total Forecasts Found:" + currentForeCasts.size());
         currentForeCastsLiveData.setValue(currentForeCasts);
     }
 

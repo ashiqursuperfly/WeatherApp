@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter City Name"
+        android:id="@+id/et_city_name"
         android:importantForAutofill="no"
         android:inputType="text">
     </EditText>
@@ -18,16 +19,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter Country Id"
+        android:id="@+id/et_country_id"
         android:importantForAutofill="no"
         android:inputType="text">
     </EditText>
-
-    <Button
-        android:id="@+id/btn_refresh"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:layout_marginBottom="5dp"
-        android:text="Find Weather" />
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btn_find_weather"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Find Weather" />
+
+        <Button
+            android:id="@+id/btn_find_device_location_weather"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="Find My Weather" />
+
+    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
@@ -110,7 +125,7 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:listitem="@layout/recycler_view_note_item"/>
+        tools:listitem="@layout/recycler_view_item"/>
 
 
 </LinearLayout>
