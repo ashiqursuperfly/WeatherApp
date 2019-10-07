@@ -9,18 +9,26 @@ import androidx.lifecycle.MutableLiveData;
 import com.ashiqur.weatherapp.ApiDataRepository;
 import com.ashiqur.weatherapp.rest_api.models.WeatherDataModel;
 
+import java.util.List;
+
 
 public class MainActivityViewModel extends AndroidViewModel {
 
     private ApiDataRepository apiDataRepository;
     private MutableLiveData<String> tvStatusString;
-    private MutableLiveData<WeatherDataModel> currentData;
+
+    private MutableLiveData<WeatherDataModel> currentWeatherData;
+    private MutableLiveData<List<WeatherDataModel>> forecastsData;
+
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
         tvStatusString = new MutableLiveData<>();
         apiDataRepository = new ApiDataRepository();
-        currentData = apiDataRepository.getCurrentLiveData();
+        currentWeatherData = apiDataRepository.getCurrentWeatherLiveData();
+
+
+
     }
 
     public MutableLiveData<String> getTvStatusString() {
@@ -33,7 +41,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     }
 
     public MutableLiveData<WeatherDataModel> getCurrentWeatherData() {
-        return currentData;
+        return currentWeatherData;
     }
 
     public void fetchCurrentWeatherData(String lon, String lat){
