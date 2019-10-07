@@ -72,6 +72,12 @@ public class ApiDataRepository {
         String windSpeed = response.body().get("wind").getAsJsonObject().get("speed").toString();
         String temperature = response.body().get("main").getAsJsonObject().get("temp").toString();
         String clouds = response.body().get("clouds").getAsJsonObject().get("all").toString();
+        currentData.setError(false);
+        currentData.setClouds(clouds);
+        currentData.setDescription(desc);
+        currentData.setTemperature(temperature);
+        currentData.setWindSpeed(windSpeed);
+        currentLiveData.setValue(currentData);
 
     }
 
