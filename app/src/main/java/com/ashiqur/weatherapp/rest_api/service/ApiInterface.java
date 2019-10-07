@@ -14,5 +14,10 @@ import retrofit2.http.QueryMap;
 public interface ApiInterface {
 
     @GET("weather")
-    Call<JsonObject> getApiData(@QueryMap Map<String, String> options);
+    Call<JsonObject> getCurrentWeatherApiData(@QueryMap Map<String, String> options);
+
+    @GET("forecast")
+    Call<JsonObject> getWeatherForecastData(@QueryMap Map<String, String> options);
+
+
 }

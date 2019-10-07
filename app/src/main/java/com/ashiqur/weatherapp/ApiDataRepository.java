@@ -17,8 +17,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ApiDataRepository {
 
+
+public class ApiDataRepository {
+    public static final int FROM_CITY_NAME = 0;
+    public static final int FROM_LAT_LON = 1;
     private static final String TAG = "ApiDataRepository";
     private MutableLiveData<WeatherDataModel> currentLiveData;
     private WeatherDataModel currentData;
@@ -26,20 +29,29 @@ public class ApiDataRepository {
     public ApiDataRepository() {
         currentData = new WeatherDataModel();
         currentLiveData = new MutableLiveData<>();
-        fetchRestApiData("90.42","24.17"); //TODO: Get Current Location
+        fetchRestApiCurrentWeatherData("90.42","24.17",ApiDataRepository.FROM_LAT_LON); //TODO: Get Current Location
     }
 
-    public void fetchRestApiData(String lon, String lat) {
-
-        //NOTE: we dont need to fetch data on AsyncTask since retrofit call.enqueue() does the job asynchronously
+    public void fetchRestApiCurrentWeatherData(String param1, String param2,int MODE) {
 
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
         final Map<String, String> mapdata = new HashMap<>();
-        mapdata.put("lat", lat);
-        mapdata.put("lon",lon);
+
+
+        if(MODE == FROM_LAT_LON) {
+            mapdata.put("lat", param2);
+            mapdata.put("lon", param1);
+        }
+        else if(MODE == FROM_CITY_NAME){
+            mapdata.put("q",param1+","+param2);
+        }
+        else{
+            return;
+        }
         mapdata.put("APPID", "31de1dc4507ce4031564ab9b4a1532f2");
-        Call<JsonObject> call = apiInterface.getApiData(mapdata);
+
+        Call<JsonObject> call = apiInterface.getCurrentWeatherApiData(mapdata);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
@@ -52,7 +64,7 @@ public class ApiDataRepository {
                     Log.w("WEATHER", response.body().get("clouds").getAsJsonObject().get("all").toString());
 
 
-                    parseJsonData(response);
+                    parseCurrentWeatherJson(response);
                 } else {
                     Log.wtf(TAG, response.message());
                 }
@@ -67,46 +79,9 @@ public class ApiDataRepository {
         });
     }
 
-    public void fetchRestApiDataFromCityName(String cityName, String countryId) {
-
-        //NOTE: we dont need to fetch data on AsyncTask since retrofit call.enqueue() does the job asynchronously
-
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-
-        final Map<String, String> mapdata = new HashMap<>();
-        mapdata.put("q",cityName+","+countryId);
-        mapdata.put("APPID", "31de1dc4507ce4031564ab9b4a1532f2");
-        Call<JsonObject> call = apiInterface.getApiData(mapdata);
-        call.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-                if (response.isSuccessful()) {
-                    assert response.body() != null;
-
-                    Log.w("WEATHER", response.body().get("weather").getAsJsonArray().get(0).getAsJsonObject().get("description").toString());
-                    Log.w("WEATHER", response.body().get("wind").getAsJsonObject().get("speed").toString());
-                    Log.w("WEATHER", response.body().get("main").getAsJsonObject().get("temp").toString());
-                    Log.w("WEATHER", response.body().get("clouds").getAsJsonObject().get("all").toString());
 
 
-                    parseJsonData(response);
-                } else {
-                    Log.wtf(TAG, response.message());
-                    currentData.setError(true);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                //TODO:
-                //currentData.setError(true);
-                Log.wtf(TAG, "OnFailure:" + t.getMessage());
-                currentData.setError(true);
-            }
-        });
-    }
-
-    private void parseJsonData(Response<JsonObject> response) {
+    private void parseCurrentWeatherJson(Response<JsonObject> response) {
         String desc = response.body().get("weather").getAsJsonArray().get(0).getAsJsonObject().get("description").toString();
         String windSpeed = response.body().get("wind").getAsJsonObject().get("speed").toString();
         String temperature = response.body().get("main").getAsJsonObject().get("temp").toString();

@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         initViews();
         mainActivityViewModel = (MainActivityViewModel) ViewModelUtils.GetViewModel(MainActivity.this, MainActivityViewModel.class);
 
-        mainActivityViewModel.getCurrentData().observe(MainActivity.this, new Observer<WeatherDataModel>() {
+        mainActivityViewModel.getCurrentWeatherData().observe(MainActivity.this, new Observer<WeatherDataModel>() {
             @Override
             public void onChanged(WeatherDataModel weatherDataModel) {
                 tvTemperature.setText(weatherDataModel.getTemperature());
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         btnRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainActivityViewModel.fetchRestApiDataFromCityName("California","US");
+                mainActivityViewModel.fetchCurrentWeatherDataFromCityName("California","US");
             }
         });
     }
