@@ -85,14 +85,11 @@ public class MainActivity extends AppCompatActivity {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         //Check gps is enable or not
-
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             //Write Function To enable gps
-
             OnGPS();
         } else {
             //GPS is already On then
-
             getLocation();
         }
     }
@@ -111,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                mainActivityViewModel.fetchCurrentWeatherDataFromCityName(etCityName.getText().toString().trim(), etCountryId.getText().toString().trim());
+                mainActivityViewModel.fetchCurrentWeatherDataFromCityName(etCityName.getText().toString().trim(), etCountryId.getText().toString().trim().toUpperCase());
             }
         });
         btnDeviceLocationWeather = findViewById(R.id.btn_find_device_location_weather);
@@ -135,20 +132,6 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new ForecastsDataAdapter();
         recyclerView.setAdapter(adapter);
-
-//        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
-//                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-//            @Override
-//            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-//                return false;
-//            }
-//
-//            @Override
-//            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-//                noteViewModel.delete(adapter.getNoteAt(viewHolder.getAdapterPosition()));
-//                Toast.makeText(MainActivity.this, "Note deleted", Toast.LENGTH_SHORT).show();
-//            }
-//        }).attachToRecyclerView(recyclerView);
 
     }
 
