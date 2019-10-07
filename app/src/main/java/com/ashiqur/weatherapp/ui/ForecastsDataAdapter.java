@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ForecastsDataAdapter extends RecyclerView.Adapter<ForecastsDataAdapter.DataViewHolder> {
-    private List<WeatherDataModel> notes = new ArrayList<>();
+    private List<WeatherDataModel> data = new ArrayList<>();
 
     @NonNull
     @Override
@@ -27,7 +27,7 @@ public class ForecastsDataAdapter extends RecyclerView.Adapter<ForecastsDataAdap
 
     @Override
     public void onBindViewHolder(@NonNull DataViewHolder holder, int position) {
-        WeatherDataModel currentNote = notes.get(position);
+        WeatherDataModel currentNote = data.get(position);
         holder.textViewDesc.setText(currentNote.getDescription());
         holder.textViewWindSpeed.setText(currentNote.getWindSpeed());
         holder.textViewCloud.setText(String.valueOf(currentNote.getClouds()));
@@ -36,15 +36,15 @@ public class ForecastsDataAdapter extends RecyclerView.Adapter<ForecastsDataAdap
 
     @Override
     public int getItemCount() {
-        return notes.size();
+        return data.size();
     }
 
     public WeatherDataModel getNoteAt(int index) {
-        return notes.get(index);
+        return data.get(index);
     }
 
-    public void setNotes(List<WeatherDataModel> data) {
-        this.notes = data;
+    public void setData(List<WeatherDataModel> data) {
+        this.data = data;
         notifyDataSetChanged();
     }
 

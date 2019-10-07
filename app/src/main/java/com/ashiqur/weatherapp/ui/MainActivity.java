@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         mainActivityViewModel.getForecastsData().observe(this, new Observer<List<WeatherDataModel>>() {
             @Override
             public void onChanged(List<WeatherDataModel> weatherDataModels) {
-                adapter.setNotes(weatherDataModels);
+                adapter.setData(weatherDataModels);
             }
         });
     }
