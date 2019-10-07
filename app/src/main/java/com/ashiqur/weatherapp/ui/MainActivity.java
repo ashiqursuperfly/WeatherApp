@@ -34,10 +34,10 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_LOCATION = 1;
     private static final String TAG = "MainActivity";
-    LocationManager locationManager;
 
+    private LocationManager locationManager;
     private MainActivityViewModel mainActivityViewModel;
-    private TextView tvTemperature, tvDescription, tvCloud, tvWindSpeed;
+    private TextView tvTemperature, tvDescription, tvCloud, tvWindSpeed,tvCityName;
     private Button btnAnyWeather;
     private ForecastsDataAdapter adapter;
     private Button btnDeviceLocationWeather;
@@ -48,14 +48,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
+        setupViewModel();
         initPermissions();
         findDeviceLocation();
-
         Toast.makeText(getApplicationContext(), "Location:" + ApiDataRepository.latitude + "," + ApiDataRepository.longitude, Toast.LENGTH_LONG).show();
         Log.wtf(TAG, ApiDataRepository.latitude + "," + ApiDataRepository.longitude);
 
-        mainActivityViewModel = (MainActivityViewModel) ViewModelUtils.GetViewModel(MainActivity.this, MainActivityViewModel.class);
+    }
 
+    private void setupViewModel() {
+        mainActivityViewModel = (MainActivityViewModel) ViewModelUtils.GetViewModel(MainActivity.this, MainActivityViewModel.class);
         mainActivityViewModel.getCurrentWeatherData().observe(MainActivity.this, new Observer<WeatherDataModel>() {
             @Override
             public void onChanged(WeatherDataModel weatherDataModel) {
@@ -63,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 tvDescription.setText(weatherDataModel.getDescription());
                 tvCloud.setText("Cloud:" + weatherDataModel.getClouds() + "%");
                 tvWindSpeed.setText("Wind Speed:" + weatherDataModel.getWindSpeed());
+                tvCityName.setText(weatherDataModel.getLocationName());
             }
         });
         mainActivityViewModel.getForecastsData().observe(this, new Observer<List<WeatherDataModel>>() {
@@ -71,8 +74,6 @@ public class MainActivity extends AppCompatActivity {
                 adapter.setNotes(weatherDataModels);
             }
         });
-
-
     }
 
     private void initPermissions() {
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         //Check gps is enable or not
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             //Write Function To enable gps
-            OnGPS();
+            gpsEnable();
         } else {
             //GPS is already On then
             getLocation();
@@ -103,21 +104,30 @@ public class MainActivity extends AppCompatActivity {
         tvDescription = findViewById(R.id.tv_desc);
         tvWindSpeed = findViewById(R.id.tv_wind_speed);
         btnAnyWeather = findViewById(R.id.btn_find_weather);
+        tvCityName = findViewById(R.id.tv_city_name);
 
         btnAnyWeather.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String cityName = etCityName.getText().toString().trim(),countryId = etCountryId.getText().toString().trim();
 
-                mainActivityViewModel.fetchCurrentWeatherDataFromCityName(etCityName.getText().toString().trim(), etCountryId.getText().toString().trim().toUpperCase());
+                if(cityName.equals("") || countryId.equals(""))
+                    Toast.makeText(getApplicationContext(),"Invalid Input",Toast.LENGTH_LONG).show();
+                else {
+                    mainActivityViewModel.fetchCurrentWeatherDataFromCityName(cityName, countryId.toUpperCase());
+                    mainActivityViewModel.fetchCurrentForecastsDataFromCityName(cityName, countryId.toUpperCase());
+                }
             }
         });
         btnDeviceLocationWeather = findViewById(R.id.btn_find_device_location_weather);
         btnDeviceLocationWeather.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ApiDataRepository.longitude != null && ApiDataRepository.latitude != null) {
-                    findDeviceLocation();
+                findDeviceLocation();
+                if (ApiDataRepository.longitude != null || ApiDataRepository.latitude != null) {
                     mainActivityViewModel.fetchCurrentWeatherData(ApiDataRepository.longitude, ApiDataRepository.latitude);
+                    mainActivityViewModel.fetchCurrentForecastsData(ApiDataRepository.longitude, ApiDataRepository.latitude);
+
                 } else
                     Toast.makeText(getApplicationContext(), "Error Finding Current Location Weather.", Toast.LENGTH_LONG).show();
             }
@@ -137,13 +147,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void getLocation() {
 
-        //Check Permissions again
-
         if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this,
 
                 Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]
                     {Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+
         } else {
             Location LocationGps = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             Location LocationNetwork = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
@@ -156,7 +165,6 @@ public class MainActivity extends AppCompatActivity {
                 ApiDataRepository.latitude = String.valueOf(lat);
                 ApiDataRepository.longitude = String.valueOf(longi);
 
-                // showLocationTxt.setText("Your Location:"+"\n"+"Latitude= "+ApiDataRepository.latitude+"\n"+"Longitude= "+ApiDataRepository.longitude);
             } else if (LocationNetwork != null) {
                 double lat = LocationNetwork.getLatitude();
                 double longi = LocationNetwork.getLongitude();
@@ -164,7 +172,6 @@ public class MainActivity extends AppCompatActivity {
                 ApiDataRepository.latitude = String.valueOf(lat);
                 ApiDataRepository.longitude = String.valueOf(longi);
 
-                //showLocationTxt.setText("Your Location:"+"\n"+"Latitude= "+ApiDataRepository.latitude+"\n"+"Longitude= "+ApiDataRepository.longitude);
             } else if (LocationPassive != null) {
                 double lat = LocationPassive.getLatitude();
                 double longi = LocationPassive.getLongitude();
@@ -172,17 +179,14 @@ public class MainActivity extends AppCompatActivity {
                 ApiDataRepository.latitude = String.valueOf(lat);
                 ApiDataRepository.longitude = String.valueOf(longi);
 
-                //showLocationTxt.setText("Your Location:"+"\n"+"Latitude= "+ApiDataRepository.latitude+"\n"+"Longitude= "+ApiDataRepository.longitude);
             } else {
                 Toast.makeText(this, "Can't Get Your Location", Toast.LENGTH_SHORT).show();
             }
-
-            //Thats All Run Your App
         }
 
     }
 
-    private void OnGPS() {
+    private void gpsEnable() {
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 

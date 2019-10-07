@@ -48,6 +48,14 @@ public class MainActivityViewModel extends AndroidViewModel {
         apiDataRepository.fetchRestApiCurrentWeatherData(city, countryId, ApiDataRepository.FROM_CITY_NAME);
     }
 
+    public void fetchCurrentForecastsData(String lon, String lat) {
+        apiDataRepository.fetchRestApiForecastData(lon, lat, ApiDataRepository.FROM_LAT_LON);
+    }
+
+    public void fetchCurrentForecastsDataFromCityName(String city, String countryId) {
+        apiDataRepository.fetchRestApiForecastData(city, countryId, ApiDataRepository.FROM_CITY_NAME);
+    }
+
     public MutableLiveData<WeatherDataModel> getCurrentWeatherData() {
         return currentWeatherData;
     }

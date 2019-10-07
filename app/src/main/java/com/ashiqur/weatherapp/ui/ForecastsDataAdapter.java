@@ -14,24 +14,24 @@ import com.ashiqur.weatherapp.rest_api.models.WeatherDataModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ForecastsDataAdapter extends RecyclerView.Adapter<ForecastsDataAdapter.NoteHolder> {
+public class ForecastsDataAdapter extends RecyclerView.Adapter<ForecastsDataAdapter.DataViewHolder> {
     private List<WeatherDataModel> notes = new ArrayList<>();
 
     @NonNull
     @Override
-    public NoteHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public DataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recycler_view_item, parent, false);
-        return new NoteHolder(itemView);
+        return new DataViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull NoteHolder holder, int position) {
+    public void onBindViewHolder(@NonNull DataViewHolder holder, int position) {
         WeatherDataModel currentNote = notes.get(position);
         holder.textViewDesc.setText(currentNote.getDescription());
         holder.textViewWindSpeed.setText(currentNote.getWindSpeed());
         holder.textViewCloud.setText(String.valueOf(currentNote.getClouds()));
-        holder.textViewTemperature.setText(currentNote.getTemperature().toString());
+        holder.textViewTemperature.setText(currentNote.getTemperature());
     }
 
     @Override
@@ -43,18 +43,18 @@ public class ForecastsDataAdapter extends RecyclerView.Adapter<ForecastsDataAdap
         return notes.get(index);
     }
 
-    public void setNotes(List<WeatherDataModel> notes) {
-        this.notes = notes;
+    public void setNotes(List<WeatherDataModel> data) {
+        this.notes = data;
         notifyDataSetChanged();
     }
 
-    class NoteHolder extends RecyclerView.ViewHolder {
+    class DataViewHolder extends RecyclerView.ViewHolder {
         private TextView textViewDesc;
         private TextView textViewCloud;
         private TextView textViewWindSpeed;
         private TextView textViewTemperature;
 
-        public NoteHolder(View itemView) {
+        public DataViewHolder(View itemView) {
             super(itemView);
             textViewDesc = itemView.findViewById(R.id.tv_desc);
             textViewWindSpeed = itemView.findViewById(R.id.tv_wind_speed);

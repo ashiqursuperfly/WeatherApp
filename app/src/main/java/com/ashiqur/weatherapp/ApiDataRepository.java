@@ -38,7 +38,7 @@ public class ApiDataRepository {
         currentForeCasts = new ArrayList<>();
         currentWeatherLiveData = new MutableLiveData<>();
         currentForeCastsLiveData = new MutableLiveData<>();
-        if (latitude != null && longitude != null) {
+        if (latitude != null || longitude != null) {
             fetchRestApiCurrentWeatherData(longitude, latitude, ApiDataRepository.FROM_LAT_LON);
             fetchRestApiForecastData(longitude, latitude, ApiDataRepository.FROM_LAT_LON);
         } else {
@@ -69,15 +69,12 @@ public class ApiDataRepository {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.isSuccessful()) {
-                    assert response.body() != null;
-
                     /*
                     Log.w("WEATHER", response.body().get("weather").getAsJsonArray().get(0).getAsJsonObject().get("description").toString());
                     Log.w("WEATHER", response.body().get("wind").getAsJsonObject().get("speed").toString());
                     Log.w("WEATHER", response.body().get("main").getAsJsonObject().get("temp").toString());
                     Log.w("WEATHER", response.body().get("clouds").getAsJsonObject().get("all").toString());
                     */
-
                     parseCurrentWeatherJson(response);
                 } else {
                     Log.wtf(TAG, response.message());
@@ -147,6 +144,7 @@ public class ApiDataRepository {
             String temperature = item.getAsJsonObject().get("main").getAsJsonObject().get("temp").toString();
             String clouds = item.getAsJsonObject().get("clouds").getAsJsonObject().get("all").toString();
 
+
             WeatherDataModel newWeatherData = new WeatherDataModel();
             newWeatherData.setError(false);
             newWeatherData.setClouds(clouds);
@@ -167,11 +165,14 @@ public class ApiDataRepository {
         String windSpeed = response.body().get("wind").getAsJsonObject().get("speed").toString();
         String temperature = response.body().get("main").getAsJsonObject().get("temp").toString();
         String clouds = response.body().get("clouds").getAsJsonObject().get("all").toString();
+        String cityName = response.body().get("name").getAsString();
+        String countryId = response.body().getAsJsonObject("sys").get("country").getAsString();
         currentData.setError(false);
         currentData.setClouds(clouds);
         currentData.setDescription(desc);
         currentData.setTemperature(temperature);
         currentData.setWindSpeed(windSpeed);
+        currentData.setLocationName(cityName+","+countryId);
         currentWeatherLiveData.setValue(currentData);
 
     }
