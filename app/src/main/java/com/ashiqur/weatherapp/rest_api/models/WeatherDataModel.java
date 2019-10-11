@@ -4,13 +4,7 @@ package com.ashiqur.weatherapp.rest_api.models;
 import java.math.BigDecimal;
 
 public class WeatherDataModel {
-    private String temperature;
-    private String windSpeed;
-    private String description;
-    private String clouds;
-    private String locationName;
-    private String date;
-    private String imageUrl;
+    private String temperature,windSpeed,date,description,clouds,locationName,imageUrl,humidity,pressure,sunrise,sunset;
     private boolean isError = false;
 
     public WeatherDataModel() {
@@ -80,6 +74,38 @@ public class WeatherDataModel {
 
     public void setLocationName(String locationName) {
         this.locationName = locationName;
+    }
+
+    public String getHumidity() {
+        return humidity;
+    }
+
+    public void setHumidity(String humidity) {
+        this.humidity = humidity;
+    }
+
+    public String getPressure() {
+        return pressure;
+    }
+
+    public void setPressure(String pressure) {
+        this.pressure = pressure;
+    }
+
+    public String getSunrise() {
+        return sunrise;
+    }
+
+    public void setSunrise(String sunrise) {
+        this.sunrise = sunrise;
+    }
+
+    public String getSunset() {
+        return sunset;
+    }
+
+    public void setSunset(String sunset) {
+        this.sunset = sunset;
     }
 }
 

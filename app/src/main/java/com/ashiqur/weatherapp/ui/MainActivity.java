@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,6 +19,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -39,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     private LocationManager locationManager;
     private MainActivityViewModel mainActivityViewModel;
-    private TextView tvTemperature, tvDescription, tvCloud, tvWindSpeed, tvCityName;
+    private TextView tvTemperature, tvDescription, tvCloud, tvWindSpeed, tvCityName,tvSunrise,tvSunset,tvPressure,tvHumidity;
     private ForecastsDataAdapter adapter;
     private EditText etCityName, etCountryId;
     private ImageView imageView;
@@ -64,9 +66,14 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(WeatherDataModel weatherDataModel) {
                 tvTemperature.setText(weatherDataModel.getTemperature());
                 tvDescription.setText(weatherDataModel.getDescription());
-                tvCloud.setText("Cloud:" + weatherDataModel.getClouds() + "%");
-                tvWindSpeed.setText("Wind Speed:" + weatherDataModel.getWindSpeed());
+                tvCloud.setText("Cloud: " + weatherDataModel.getClouds() + "%");
+                tvWindSpeed.setText("Wind Speed: " + weatherDataModel.getWindSpeed());
                 tvCityName.setText(weatherDataModel.getLocationName());
+                tvSunrise.setText("Sunrise: "+weatherDataModel.getSunrise());
+                tvSunset.setText("Sunset: "+weatherDataModel.getSunset());
+                tvPressure.setText("Pressure: "+weatherDataModel.getPressure());
+                tvHumidity.setText("Humidity: "+weatherDataModel.getHumidity());
+
                 Glide.with(MainActivity.this).asBitmap().load(weatherDataModel.getImageUrl()).into(imageView);
 
             }
@@ -99,8 +106,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        etCityName = findViewById(R.id.et_city_name);
-        etCountryId = findViewById(R.id.et_country_id);
 
         imageView = findViewById(R.id.image);
 
@@ -108,8 +113,17 @@ public class MainActivity extends AppCompatActivity {
         tvCloud = findViewById(R.id.tv_cloud);
         tvDescription = findViewById(R.id.tv_desc);
         tvWindSpeed = findViewById(R.id.tv_wind_speed);
+        tvSunrise = findViewById(R.id.tv_sunrise);
+        tvSunset = findViewById(R.id.tv_sunset);
+        tvPressure = findViewById(R.id.tv_pressure);
+        tvHumidity = findViewById(R.id.tv_humidity);
+
         Button btnAnyWeather = findViewById(R.id.btn_find_weather);
         tvCityName = findViewById(R.id.tv_city_name);
+
+
+        etCityName = findViewById(R.id.et_city_name);
+        etCountryId = findViewById(R.id.et_country_id);
 
         btnAnyWeather.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
         Button btnDeviceLocationWeather = findViewById(R.id.btn_find_device_location_weather);
         btnDeviceLocationWeather.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,7 +161,11 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
 
         adapter = new ForecastsDataAdapter(this);
+
         recyclerView.setAdapter(adapter);
+
+
+
 
     }
 

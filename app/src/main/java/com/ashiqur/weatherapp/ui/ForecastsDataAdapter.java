@@ -70,6 +70,7 @@ public class ForecastsDataAdapter extends RecyclerView.Adapter<ForecastsDataAdap
             textViewTemperature = itemView.findViewById(R.id.tv_temperature);
             textViewDate = itemView.findViewById(R.id.tv_date);
             image = itemView.findViewById(R.id.imageView);
+            
         }
     }
 }

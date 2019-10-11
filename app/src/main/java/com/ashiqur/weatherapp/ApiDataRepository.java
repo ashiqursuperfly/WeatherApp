@@ -130,13 +130,15 @@ public class ApiDataRepository {
     }
 
     private void parseWeatherForecast(Response<JsonObject> response) {
+        if (response.body() == null) return;
+
         int total = response.body().getAsJsonArray("list").size();
 
         currentForeCasts.clear();
 
         for (int i = 0; (i < total); i++) {
 
-            if(i%4!=0)continue;
+            if (i % 4 != 0) continue;
 
             JsonElement item = response.body().getAsJsonArray("list").get(i);
             String desc = item.getAsJsonObject().get("weather").getAsJsonArray().get(0).getAsJsonObject().get("description").toString();
@@ -145,9 +147,9 @@ public class ApiDataRepository {
             String temperature = item.getAsJsonObject().get("main").getAsJsonObject().get("temp").toString();
             String clouds = item.getAsJsonObject().get("clouds").getAsJsonObject().get("all").toString();
             String dateText = item.getAsJsonObject().get("dt_txt").toString();
-            String imageUrl = "http://openweathermap.org/img/wn/"+iconId.substring(1,iconId.length()-1)+"@2x.png";
+            String imageUrl = "http://openweathermap.org/img/wn/" + iconId.substring(1, iconId.length() - 1) + "@2x.png";
             // http://openweathermap.org/img/wn/10d@2x.png
-            Log.wtf(TAG,imageUrl);
+            Log.wtf(TAG, imageUrl);
             WeatherDataModel newWeatherData = new WeatherDataModel();
             newWeatherData.setError(false);
             newWeatherData.setClouds(clouds);
@@ -168,26 +170,38 @@ public class ApiDataRepository {
     private void parseCurrentWeatherJson(Response<JsonObject> response) {
         if (response.body() == null) return;
 
+        // weather stats
         String desc = response.body().get("weather").getAsJsonArray().get(0).getAsJsonObject().get("description").toString();
-        String iconId = response.body().get("weather").getAsJsonArray().get(0).getAsJsonObject().get("icon").toString().trim();
         String windSpeed = response.body().get("wind").getAsJsonObject().get("speed").toString();
         String temperature = response.body().get("main").getAsJsonObject().get("temp").toString();
+        String pressure = response.body().get("main").getAsJsonObject().get("pressure").toString();
+        String humidity = response.body().get("main").getAsJsonObject().get("humidity").toString();
         String clouds = response.body().get("clouds").getAsJsonObject().get("all").toString();
+        String sunrise = response.body().get("sys").getAsJsonObject().get("sunrise").toString();
+        String sunset = response.body().get("sys").getAsJsonObject().get("sunset").toString();
+
+
+        // misc
         String cityName = response.body().get("name").getAsString();
         String countryId = response.body().getAsJsonObject("sys").get("country").getAsString();
         String dateText = response.body().get("dt").getAsString();
-        String imageUrl = "http://openweathermap.org/img/wn/"+iconId.substring(1,iconId.length()-1)+"@2x.png";
-
+        String iconId = response.body().get("weather").getAsJsonArray().get(0).getAsJsonObject().get("icon").toString().trim();
+        String imageUrl = "http://openweathermap.org/img/wn/" + iconId.substring(1, iconId.length() - 1) + "@2x.png";
 
         currentData.setError(false);
+
         currentData.setClouds(clouds);
         currentData.setDescription(desc);
         currentData.setTemperature(temperature);
         currentData.setWindSpeed(windSpeed);
+        currentData.setPressure(pressure);
+        currentData.setHumidity(humidity);
+        currentData.setSunrise(new Date(Long.parseLong(sunrise) * 1000L).toString());
+        currentData.setSunset(new Date(Long.parseLong(sunset) * 1000L).toString());
+
         currentData.setLocationName(cityName + "," + countryId);
         currentData.setImageUrl(imageUrl);
-        currentData.setDate(new Date(Long.parseLong(dateText)*1000L).toString());
-        Log.wtf(TAG,currentData.getDate());
+        currentData.setDate(new Date(Long.parseLong(dateText) * 1000L).toString());
 
         currentWeatherLiveData.setValue(currentData);
 

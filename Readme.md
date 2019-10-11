@@ -4,6 +4,11 @@
 ##### 3. "Find My Weather" button finds weather using the device GPS
 ##### 4. Scroll Recycler View Titled "Forecasts" to view the upcoming weather forecasts
 
+
+
+#### TODO
+##### 1. Show more weather information on current weather section.
+
 #### Implemented Features
 ##### 1. Model-View-ViewModel architecture implemented as suggested by Google
 ##### 2. Fetching OpenWeather public api data using Retrofit
