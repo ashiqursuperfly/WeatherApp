@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ import com.ashiqur.weatherapp.ApiDataRepository;
 import com.ashiqur.weatherapp.R;
 import com.ashiqur.weatherapp.rest_api.models.WeatherDataModel;
 import com.ashiqur.weatherapp.utils.ViewModelUtils;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -37,11 +39,10 @@ public class MainActivity extends AppCompatActivity {
 
     private LocationManager locationManager;
     private MainActivityViewModel mainActivityViewModel;
-    private TextView tvTemperature, tvDescription, tvCloud, tvWindSpeed,tvCityName;
-    private Button btnAnyWeather;
+    private TextView tvTemperature, tvDescription, tvCloud, tvWindSpeed, tvCityName;
     private ForecastsDataAdapter adapter;
-    private Button btnDeviceLocationWeather;
     private EditText etCityName, etCountryId;
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
                 tvCloud.setText("Cloud:" + weatherDataModel.getClouds() + "%");
                 tvWindSpeed.setText("Wind Speed:" + weatherDataModel.getWindSpeed());
                 tvCityName.setText(weatherDataModel.getLocationName());
+                Glide.with(MainActivity.this).asBitmap().load(weatherDataModel.getImageUrl()).into(imageView);
+
             }
         });
         mainActivityViewModel.getForecastsData().observe(this, new Observer<List<WeatherDataModel>>() {
@@ -99,27 +102,29 @@ public class MainActivity extends AppCompatActivity {
         etCityName = findViewById(R.id.et_city_name);
         etCountryId = findViewById(R.id.et_country_id);
 
+        imageView = findViewById(R.id.image);
+
         tvTemperature = findViewById(R.id.tv_temperature);
         tvCloud = findViewById(R.id.tv_cloud);
         tvDescription = findViewById(R.id.tv_desc);
         tvWindSpeed = findViewById(R.id.tv_wind_speed);
-        btnAnyWeather = findViewById(R.id.btn_find_weather);
+        Button btnAnyWeather = findViewById(R.id.btn_find_weather);
         tvCityName = findViewById(R.id.tv_city_name);
 
         btnAnyWeather.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String cityName = etCityName.getText().toString().trim(),countryId = etCountryId.getText().toString().trim();
+                String cityName = etCityName.getText().toString().trim(), countryId = etCountryId.getText().toString().trim();
 
-                if(cityName.equals("") || countryId.equals(""))
-                    Toast.makeText(getApplicationContext(),"Invalid Input",Toast.LENGTH_LONG).show();
+                if (cityName.equals("") || countryId.equals(""))
+                    Toast.makeText(getApplicationContext(), "Invalid Input", Toast.LENGTH_LONG).show();
                 else {
                     mainActivityViewModel.fetchCurrentWeatherDataFromCityName(cityName, countryId.toUpperCase());
                     mainActivityViewModel.fetchCurrentForecastsDataFromCityName(cityName, countryId.toUpperCase());
                 }
             }
         });
-        btnDeviceLocationWeather = findViewById(R.id.btn_find_device_location_weather);
+        Button btnDeviceLocationWeather = findViewById(R.id.btn_find_device_location_weather);
         btnDeviceLocationWeather.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,10 +142,10 @@ public class MainActivity extends AppCompatActivity {
 
     void initRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setHasFixedSize(true);
 
-        adapter = new ForecastsDataAdapter();
+        adapter = new ForecastsDataAdapter(this);
         recyclerView.setAdapter(adapter);
 
     }

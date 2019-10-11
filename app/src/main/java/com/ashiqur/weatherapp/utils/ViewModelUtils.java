@@ -13,7 +13,7 @@ public class ViewModelUtils {
     public static ViewModel GetViewModel(FragmentActivity activity, Class<? extends ViewModel> viewModelClass){
         return ViewModelProviders.of(activity).get(viewModelClass);
     }
-    public static ViewModel GetViewModel(Fragment activity, Class<? extends ViewModel> viewModelClass){
-        return ViewModelProviders.of(activity).get(viewModelClass);
+    public static ViewModel GetViewModel(Fragment fragment, Class<? extends ViewModel> viewModelClass){
+        return ViewModelProviders.of(fragment).get(viewModelClass);
     }
 }

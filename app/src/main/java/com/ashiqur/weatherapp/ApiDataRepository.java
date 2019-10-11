@@ -12,6 +12,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,7 +96,6 @@ public class ApiDataRepository {
 
         final Map<String, String> mapdata = new HashMap<>();
 
-
         if (MODE == FROM_LAT_LON) {
             mapdata.put("lat", param2);
             mapdata.put("lon", param1);
@@ -115,9 +115,6 @@ public class ApiDataRepository {
                     int total = response.body().getAsJsonArray("list").size();
                     Log.wtf("WEATHER", String.valueOf(response.body().getAsJsonArray("list").size()));
                     parseWeatherForecast(response);
-
-
-                    //parseCurrentWeatherJson(response);
                 } else {
                     Log.wtf(TAG, response.message());
                 }
@@ -137,20 +134,28 @@ public class ApiDataRepository {
 
         currentForeCasts.clear();
 
-        for (int i = 0; i < total / 2; i++) {
+        for (int i = 0; (i < total); i++) {
+
+            if(i%4!=0)continue;
+
             JsonElement item = response.body().getAsJsonArray("list").get(i);
             String desc = item.getAsJsonObject().get("weather").getAsJsonArray().get(0).getAsJsonObject().get("description").toString();
+            String iconId = item.getAsJsonObject().get("weather").getAsJsonArray().get(0).getAsJsonObject().get("icon").toString().trim();
             String windSpeed = item.getAsJsonObject().get("wind").getAsJsonObject().get("speed").toString();
             String temperature = item.getAsJsonObject().get("main").getAsJsonObject().get("temp").toString();
             String clouds = item.getAsJsonObject().get("clouds").getAsJsonObject().get("all").toString();
-
-
+            String dateText = item.getAsJsonObject().get("dt_txt").toString();
+            String imageUrl = "http://openweathermap.org/img/wn/"+iconId.substring(1,iconId.length()-1)+"@2x.png";
+            // http://openweathermap.org/img/wn/10d@2x.png
+            Log.wtf(TAG,imageUrl);
             WeatherDataModel newWeatherData = new WeatherDataModel();
             newWeatherData.setError(false);
             newWeatherData.setClouds(clouds);
             newWeatherData.setDescription(desc);
             newWeatherData.setTemperature(temperature);
             newWeatherData.setWindSpeed(windSpeed);
+            newWeatherData.setDate(dateText);
+            newWeatherData.setImageUrl(imageUrl);
             currentWeatherLiveData.setValue(currentData);
             currentForeCasts.add(newWeatherData);
 
@@ -161,18 +166,29 @@ public class ApiDataRepository {
 
 
     private void parseCurrentWeatherJson(Response<JsonObject> response) {
+        if (response.body() == null) return;
+
         String desc = response.body().get("weather").getAsJsonArray().get(0).getAsJsonObject().get("description").toString();
+        String iconId = response.body().get("weather").getAsJsonArray().get(0).getAsJsonObject().get("icon").toString().trim();
         String windSpeed = response.body().get("wind").getAsJsonObject().get("speed").toString();
         String temperature = response.body().get("main").getAsJsonObject().get("temp").toString();
         String clouds = response.body().get("clouds").getAsJsonObject().get("all").toString();
         String cityName = response.body().get("name").getAsString();
         String countryId = response.body().getAsJsonObject("sys").get("country").getAsString();
+        String dateText = response.body().get("dt").getAsString();
+        String imageUrl = "http://openweathermap.org/img/wn/"+iconId.substring(1,iconId.length()-1)+"@2x.png";
+
+
         currentData.setError(false);
         currentData.setClouds(clouds);
         currentData.setDescription(desc);
         currentData.setTemperature(temperature);
         currentData.setWindSpeed(windSpeed);
-        currentData.setLocationName(cityName+","+countryId);
+        currentData.setLocationName(cityName + "," + countryId);
+        currentData.setImageUrl(imageUrl);
+        currentData.setDate(new Date(Long.parseLong(dateText)*1000L).toString());
+        Log.wtf(TAG,currentData.getDate());
+
         currentWeatherLiveData.setValue(currentData);
 
     }

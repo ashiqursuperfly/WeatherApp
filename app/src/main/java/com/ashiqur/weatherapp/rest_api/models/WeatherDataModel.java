@@ -4,24 +4,38 @@ package com.ashiqur.weatherapp.rest_api.models;
 import java.math.BigDecimal;
 
 public class WeatherDataModel {
-    private String temperature, windSpeed, description, clouds, locationName;
+    private String temperature;
+    private String windSpeed;
+    private String description;
+    private String clouds;
+    private String locationName;
+    private String date;
+    private String imageUrl;
     private boolean isError = false;
 
     public WeatherDataModel() {
     }
 
-    public WeatherDataModel(String temperature, String windSpeed, String description, String clouds,String locationName) {
-        this.temperature = temperature;
-        this.windSpeed = windSpeed;
-        this.description = description;
-        this.clouds = clouds;
-        this.locationName = locationName;
+    public String getTemperature() {
+        BigDecimal bd = new BigDecimal(Float.parseFloat(temperature) - 273f);
+        bd = bd.setScale(1, BigDecimal.ROUND_HALF_UP);
+        return String.valueOf(bd.floatValue()) + '\u2103';
     }
 
-    public String getTemperature() {
-        BigDecimal bd = new BigDecimal(Float.parseFloat(temperature)-273f);
-        bd = bd.setScale(1, BigDecimal.ROUND_HALF_UP);
-        return String.valueOf(bd.floatValue())+'\u2103';
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public void setTemperature(String temperature) {
@@ -29,7 +43,7 @@ public class WeatherDataModel {
     }
 
     public String getWindSpeed() {
-        return windSpeed+"m/s";
+        return windSpeed + "m/s";
     }
 
     public void setWindSpeed(String windSpeed) {
