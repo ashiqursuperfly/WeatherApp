@@ -4,7 +4,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.Observer;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,7 +18,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -36,15 +34,16 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String bgImageUrl = "https://source.unsplash.com/featured/900x1600?";
     private static final int REQUEST_LOCATION = 1;
     private static final String TAG = "MainActivity";
 
     private LocationManager locationManager;
     private MainActivityViewModel mainActivityViewModel;
-    private TextView tvTemperature, tvDescription, tvCloud, tvWindSpeed, tvCityName,tvSunrise,tvSunset,tvPressure,tvHumidity;
+    private TextView tvTemperature, tvDescription, tvCloud, tvWindSpeed, tvCityName, tvSunrise, tvSunset, tvPressure, tvHumidity;
     private ForecastsDataAdapter adapter;
     private EditText etCityName, etCountryId;
-    private ImageView imageView;
+    private ImageView ivCurrentWeather, ivBg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,17 +63,18 @@ public class MainActivity extends AppCompatActivity {
         mainActivityViewModel.getCurrentWeatherData().observe(MainActivity.this, new Observer<WeatherDataModel>() {
             @Override
             public void onChanged(WeatherDataModel weatherDataModel) {
-                tvTemperature.setText(weatherDataModel.getTemperature());
+                tvCityName.setText(weatherDataModel.getLocationName());
                 tvDescription.setText(weatherDataModel.getDescription());
+                tvTemperature.setText(weatherDataModel.getTemperature());
                 tvCloud.setText("Cloud: " + weatherDataModel.getClouds() + "%");
                 tvWindSpeed.setText("Wind Speed: " + weatherDataModel.getWindSpeed());
-                tvCityName.setText(weatherDataModel.getLocationName());
-                tvSunrise.setText("Sunrise: "+weatherDataModel.getSunrise());
-                tvSunset.setText("Sunset: "+weatherDataModel.getSunset());
-                tvPressure.setText("Pressure: "+weatherDataModel.getPressure());
-                tvHumidity.setText("Humidity: "+weatherDataModel.getHumidity());
+                tvSunrise.setText("Sunrise: " + weatherDataModel.getSunrise());
+                tvSunset.setText("Sunset: " + weatherDataModel.getSunset());
+                tvPressure.setText("Pressure: " + weatherDataModel.getPressure());
+                tvHumidity.setText("Humidity: " + weatherDataModel.getHumidity());
 
-                Glide.with(MainActivity.this).asBitmap().load(weatherDataModel.getImageUrl()).into(imageView);
+                Glide.with(MainActivity.this).asBitmap().load(weatherDataModel.getImageUrl()).into(ivCurrentWeather);
+                Glide.with(MainActivity.this).asBitmap().load(bgImageUrl + weatherDataModel.getLocationName()).into(ivBg);
 
             }
         });
@@ -107,7 +107,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initViews() {
 
-        imageView = findViewById(R.id.image);
+        ivCurrentWeather = findViewById(R.id.image);
+        ivBg = findViewById(R.id.image_view_central);
 
         tvTemperature = findViewById(R.id.tv_temperature);
         tvCloud = findViewById(R.id.tv_cloud);
@@ -120,7 +121,6 @@ public class MainActivity extends AppCompatActivity {
 
         Button btnAnyWeather = findViewById(R.id.btn_find_weather);
         tvCityName = findViewById(R.id.tv_city_name);
-
 
         etCityName = findViewById(R.id.et_city_name);
         etCountryId = findViewById(R.id.et_country_id);
@@ -163,8 +163,6 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ForecastsDataAdapter(this);
 
         recyclerView.setAdapter(adapter);
-
-
 
 
     }
