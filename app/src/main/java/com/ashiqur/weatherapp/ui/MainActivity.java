@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 sb.delete(0, sb.length());
 
                 Glide.with(MainActivity.this).asBitmap().load(weatherDataModel.getImageUrl()).into(ivCurrentWeather);
+                //weatherDataModel.getLocationName().split(",");
                 Glide.with(MainActivity.this).asBitmap().load(bgImageUrl + weatherDataModel.getLocationName()).into(ivBg);
 
             }

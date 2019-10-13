@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="2dp"
-    android:background="@color/bgTranslucent10Percent"
     tools:context=".ui.MainActivity">
     <ImageView
         android:id="@+id/image_view_central"
@@ -24,6 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:padding="3dp"
         android:layout_marginBottom="2dp">
 
         <EditText
@@ -31,21 +31,19 @@
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:backgroundTint="@color/bgTranslucent10Percent"
+            android:background="@color/colorPrimary"
             android:hint="City ..."
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:importantForAutofill="no"
-            android:textStyle="bold"
             android:inputType="text" />
 
         <EditText
             android:id="@+id/et_country_id"
             android:layout_width="match_parent"
+            android:background="@color/colorPrimary"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:backgroundTint="@color/bgTranslucent10Percent"
+            android:textSize="20sp"
             android:hint="Country ..."
             android:importantForAutofill="no"
             android:inputType="text" />
@@ -65,9 +63,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="3dp"
-            android:background="@android:color/white"
+            android:background="#70FFFFFF"
             android:fontFamily="casual"
             android:text="Find Weather"
+            android:textStyle="bold"
             android:textAlignment="center"
             android:textColor="@color/colorAccent" />
 
@@ -76,10 +75,11 @@
          android:layout_height="wrap_content"
          android:id="@+id/btn_find_device_location_weather"
          style="@style/Widget.AppCompat.Button.Borderless"
-         android:background="@android:color/white"
+         android:background="#70FFFFFF"
          android:fontFamily="casual"
          android:text="Find My Weather"
          android:textAlignment="center"
+         android:textStyle="bold"
          android:textColor="@color/colorAccent"
          >
 
@@ -134,16 +134,16 @@
                 android:textAlignment="center"
                 android:textColor="@android:color/black"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="italic" />
 
 
             <TextView
                 android:id="@+id/tv_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimaryDark"
-                android:text="TextView"
                 android:layout_gravity="end"
+                android:text="TextView"
+                android:textColor="@android:color/black"
 
                 android:textSize="18sp" />
 
@@ -247,7 +247,7 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
+        android:background="@color/bgTranslucent40Percent"
         android:layout_gravity="bottom"
         android:scrollbars="horizontal"
         app:fastScrollEnabled="false"
