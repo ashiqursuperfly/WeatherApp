@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="2dp"
+    android:background="@color/bgTranslucent10Percent"
     tools:context=".ui.MainActivity">
     <ImageView
         android:id="@+id/image_view_central"
@@ -64,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="3dp"
-            android:background="@color/bgTranslucent10Percent"
+            android:background="@android:color/white"
             android:fontFamily="casual"
             android:text="Find Weather"
             android:textAlignment="center"
@@ -75,7 +76,7 @@
          android:layout_height="wrap_content"
          android:id="@+id/btn_find_device_location_weather"
          style="@style/Widget.AppCompat.Button.Borderless"
-         android:background="@color/bgTranslucent10Percent"
+         android:background="@android:color/white"
          android:fontFamily="casual"
          android:text="Find My Weather"
          android:textAlignment="center"

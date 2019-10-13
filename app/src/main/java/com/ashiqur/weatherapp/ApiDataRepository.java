@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.ashiqur.weatherapp.rest_api.ApiClient;
 import com.ashiqur.weatherapp.rest_api.models.WeatherDataModel;
 import com.ashiqur.weatherapp.rest_api.service.ApiInterface;
+import com.ashiqur.weatherapp.utils.GPSUtils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -26,7 +27,7 @@ public class ApiDataRepository {
     public static final int FROM_CITY_NAME = 0;
     public static final int FROM_LAT_LON = 1;
     private static final String TAG = "ApiDataRepository";
-    public static String latitude, longitude;
+
     private MutableLiveData<WeatherDataModel> currentWeatherLiveData;
     private WeatherDataModel currentData;
     private List<WeatherDataModel> currentForeCasts;
@@ -39,12 +40,15 @@ public class ApiDataRepository {
         currentForeCasts = new ArrayList<>();
         currentWeatherLiveData = new MutableLiveData<>();
         currentForeCastsLiveData = new MutableLiveData<>();
-        if (latitude != null || longitude != null) {
+
+        String latitude = GPSUtils.getInstance().getLatitude(), longitude = GPSUtils.getInstance().getLongitude();
+
+        if (latitude != null && longitude != null) {
             fetchRestApiCurrentWeatherData(longitude, latitude, ApiDataRepository.FROM_LAT_LON);
             fetchRestApiForecastData(longitude, latitude, ApiDataRepository.FROM_LAT_LON);
         } else {
-            fetchRestApiCurrentWeatherData("120.42", "24.17", ApiDataRepository.FROM_LAT_LON);
-            fetchRestApiForecastData("120.42", "24.17", ApiDataRepository.FROM_LAT_LON);
+            fetchRestApiCurrentWeatherData("123.42", "24.17", ApiDataRepository.FROM_LAT_LON);
+            fetchRestApiForecastData("123.42", "24.17", ApiDataRepository.FROM_LAT_LON);
         }
     }
 
@@ -111,9 +115,6 @@ public class ApiDataRepository {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.isSuccessful()) {
-                    assert response.body() != null;
-                    int total = response.body().getAsJsonArray("list").size();
-                    Log.wtf("WEATHER", String.valueOf(response.body().getAsJsonArray("list").size()));
                     parseWeatherForecast(response);
                 } else {
                     Log.wtf(TAG, response.message());
@@ -129,7 +130,7 @@ public class ApiDataRepository {
         });
     }
 
-    private void parseWeatherForecast(Response<JsonObject> response) {
+    private void parseWeatherForecast(Response<JsonObject> response){
         if (response.body() == null) return;
 
         int total = response.body().getAsJsonArray("list").size();
@@ -187,9 +188,7 @@ public class ApiDataRepository {
         String dateText = response.body().get("dt").getAsString();
         String iconId = response.body().get("weather").getAsJsonArray().get(0).getAsJsonObject().get("icon").toString().trim();
         String imageUrl = "http://openweathermap.org/img/wn/" + iconId.substring(1, iconId.length() - 1) + "@2x.png";
-
         currentData.setError(false);
-
         currentData.setClouds(clouds);
         currentData.setDescription(desc);
         currentData.setTemperature(temperature);
@@ -204,6 +203,7 @@ public class ApiDataRepository {
         currentData.setDate(new Date(Long.parseLong(dateText) * 1000L).toString());
 
         currentWeatherLiveData.setValue(currentData);
+
 
     }
 
