@@ -4,8 +4,8 @@
     <color name="colorPrimaryDark">#006978</color>
     <color name="colorAccent">#D81B60</color>
     <color name="bg">#e0f7fa</color>
-    <color name="bgTranslucent40Percent">#6063C8FF</color>
+    <color name="bgTranslucent40Percent">#8063C8FF</color>
     <color name="bgTranslucent10Percent">#9063C8FF</color>
-    <color name="cardbg">#0097a7</color>
-
+    <color name="cardbg">#87cceb</color>
+    <color name="inputbg">#0097a7</color>
 </resources>

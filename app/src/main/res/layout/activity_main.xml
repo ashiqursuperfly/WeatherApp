@@ -18,72 +18,66 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="3dp"
-        android:layout_marginBottom="2dp">
-
-        <EditText
-            android:id="@+id/et_city_name"
-            android:layout_width="130dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:background="@color/colorPrimary"
-            android:hint="City ..."
-            android:textSize="20sp"
-            android:importantForAutofill="no"
-            android:inputType="text" />
-
-        <EditText
-            android:id="@+id/et_country_id"
+        android:orientation="vertical"
+        android:background="@color/inputbg">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:background="@color/colorPrimary"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:textSize="20sp"
-            android:hint="Country ..."
-            android:importantForAutofill="no"
-            android:inputType="text" />
+            android:orientation="horizontal"
+            android:padding="3dp"
+            android:layout_marginBottom="2dp">
 
-    </LinearLayout>
+            <EditText
+                android:id="@+id/et_city_name"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:hint="City ..."
+                android:textSize="16sp"
+                android:textColor="@android:color/white"
+                android:importantForAutofill="no"
+                android:inputType="text" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="5dp"
-        android:orientation="horizontal">
+            <EditText
+                android:id="@+id/et_country_id"
+                android:layout_width="100dp"
+                android:textColor="@android:color/white"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:textSize="16sp"
+                android:hint="Country ..."
+                android:importantForAutofill="no"
+                android:inputType="text" />
+            <ImageButton
+                android:id="@+id/btn_find_weather"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
+                android:src="@drawable/ic_search_black_32dp"
+                android:fontFamily="casual"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:contentDescription="search" />
 
-        <Button
-            android:id="@+id/btn_find_weather"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="3dp"
-            android:background="#70FFFFFF"
-            android:fontFamily="casual"
-            android:text="Find Weather"
-            android:textStyle="bold"
-            android:textAlignment="center"
-            android:textColor="@color/colorAccent" />
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_find_device_location_weather"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:fontFamily="casual"
+                android:src="@drawable/ic_my_location_black_8dp"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:contentDescription="mylocation" />
+        </LinearLayout>
 
-     <Button
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:id="@+id/btn_find_device_location_weather"
-         style="@style/Widget.AppCompat.Button.Borderless"
-         android:background="#70FFFFFF"
-         android:fontFamily="casual"
-         android:text="Find My Weather"
-         android:textAlignment="center"
-         android:textStyle="bold"
-         android:textColor="@color/colorAccent"
-         >
 
-     </Button>
 
     </LinearLayout>
 
@@ -232,27 +226,34 @@
             android:textSize="14sp"
             android:textStyle="bold" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:background="@android:color/white"
-        android:text="Forecasts"
-        android:textAlignment="center"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_gravity="bottom"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/white"
+                android:text="Forecasts"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/bgTranslucent40Percent"
-        android:layout_gravity="bottom"
-        android:scrollbars="horizontal"
-        app:fastScrollEnabled="false"
-        tools:listitem="@layout/recycler_view_horizontal_item" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/bgTranslucent40Percent"
+                android:scrollbars="horizontal"
+                app:fastScrollEnabled="false"
+                tools:listitem="@layout/recycler_view_horizontal_item" />
 
+
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>

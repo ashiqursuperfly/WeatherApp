@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -110,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         tvPressure = findViewById(R.id.tv_pressure);
         tvHumidity = findViewById(R.id.tv_humidity);
 
-        Button btnAnyWeather = findViewById(R.id.btn_find_weather);
+        ImageButton btnAnyWeather = findViewById(R.id.btn_find_weather);
         tvCityName = findViewById(R.id.tv_city_name);
 
         etCityName = findViewById(R.id.et_city_name);
@@ -130,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button btnDeviceLocationWeather = findViewById(R.id.btn_find_device_location_weather);
+        ImageButton btnDeviceLocationWeather = findViewById(R.id.btn_find_device_location_weather);
         btnDeviceLocationWeather.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
