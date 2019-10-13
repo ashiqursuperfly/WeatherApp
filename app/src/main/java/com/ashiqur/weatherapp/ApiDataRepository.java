@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.ashiqur.weatherapp.rest_api.ApiClient;
+import com.ashiqur.weatherapp.rest_api.OpenWeatherApi;
 import com.ashiqur.weatherapp.rest_api.models.WeatherDataModel;
 import com.ashiqur.weatherapp.rest_api.service.ApiInterface;
 import com.ashiqur.weatherapp.utils.GPSUtils;
@@ -67,7 +68,7 @@ public class ApiDataRepository {
         } else {
             return;
         }
-        mapdata.put("APPID", "31de1dc4507ce4031564ab9b4a1532f2");
+        mapdata.put("APPID", OpenWeatherApi.key);
 
         Call<JsonObject> call = apiInterface.getCurrentWeatherApiData(mapdata);
         call.enqueue(new Callback<JsonObject>() {
@@ -108,7 +109,7 @@ public class ApiDataRepository {
         } else {
             return;
         }
-        mapdata.put("APPID", "31de1dc4507ce4031564ab9b4a1532f2");
+        mapdata.put("APPID", OpenWeatherApi.key);
 
         Call<JsonObject> call = apiInterface.getWeatherForecastData(mapdata);
         call.enqueue(new Callback<JsonObject>() {
@@ -130,7 +131,7 @@ public class ApiDataRepository {
         });
     }
 
-    private void parseWeatherForecast(Response<JsonObject> response){
+    private void parseWeatherForecast(Response<JsonObject> response) {
         if (response.body() == null) return;
 
         int total = response.body().getAsJsonArray("list").size();
